@@ -71,10 +71,10 @@ clf.fit(X_train, y_train)
 predictions = clf.predict(X_test)
 predictions2 = clf.predict(input1)
 #print(y_test,"  ",predictions)
-print"accuracy ====>",accuracy_score(y_test, predictions)
+print("accuracy ====>",accuracy_score(y_test, predictions))
 
 # Cross Validation with KFold
-from sklearn.cross_validation import KFold
+from sklearn.model_selection import StratifiedKFold as KFold
 
 all_data = pd.read_csv('processed_cleveland_data.csv')
 make_prediction_var_binary(all_data)
@@ -85,13 +85,13 @@ y_all = all_data['num']
 
 y_all.head()
 
-def run_kfold(clf):
-    kf = KFold(297, n_folds=5)
+def run_kfold(clf,X_train,y_train):
+    kf = KFold(n_splits=5)
     outcomes = []
     fold = 0
     #print "kf"
     #print kf
-    for train_index, test_index in kf:
+    for train_index, test_index in kf.split(X_train,y_train):
         #print "train_index======>",train_index,"     test_index=====>",test_index
         fold += 1
         X_train, X_test = X_all.values[train_index], X_all.values[test_index]
@@ -108,7 +108,7 @@ def run_kfold(clf):
     print("Mean Accuracy with KFold CrossValidation:{0}".format(mean_outcome))
     predictions3 = clf.predict(input1)
     #print"By Random Forest and GridSearchCV	::",predictions2
-    print"By Random Forest and KFold       	::",predictions3
-run_kfold(clf)
+    print("By Random Forest and KFold       	::",predictions3)
+run_kfold(clf, X_train,y_train)
     
 
